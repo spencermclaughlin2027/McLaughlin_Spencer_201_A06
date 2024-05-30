@@ -115,7 +115,13 @@ Add a new named element to the end of each player's list called `height`. The he
 Print the `player_info` list to prove you were successful.
 
 ```{r}
+player_info$MJ$height <- 78
+player_info$LJ$height <- 81
+player_info$KB$height <- 78
+player_info$KA$height <- 86
+player_info$SO$height <- 85
 
+print(player_info)
 ```
 
 
@@ -134,7 +140,13 @@ Hint: initialize an empty list
 Note: this must still run correctly even if the values were to change or if another player were added to the list or if the player order changed.
 
 ```{r}
-
+new_list = c()
+names = names(player_info)
+for (i in names) {
+  index = player_info[[i]]
+  new_list[[i]] = (index$points)/(index$games_played) 
+}
+new_list
 ```
 
 
@@ -145,7 +157,11 @@ Use the list created in Part c and an appropriate apply function to round each v
 Store the output as a vector and print the results.
 
 ```{r}
+rounded <- function(x) {
+  return(round(x, digits = 2))
+}
 
+sapply(new_list, rounded)
 ```
 
 
