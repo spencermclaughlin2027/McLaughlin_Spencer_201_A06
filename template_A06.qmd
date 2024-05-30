@@ -2,15 +2,15 @@
 title: "Assignment 6"
 subtitle: "STAT 201"
 author: "Spencer McLaughlin"
-
 format:
   html:
     toc: true
     embed-resources: true
-
 execute:
   message: false
   warning: false
+editor_options: 
+  chunk_output_type: console
 ---
 
 # Instructions
@@ -182,7 +182,11 @@ ie: 91 rounds to 90; 173 rounds to 200; 1450 rounds to 1000
 Hint: use `MARGIN = 1:2` to apply the function to each value instead of only a row/col.
 
 ```{r}
+round_mat <- function(val) {
+  return(round(val, -(nchar(val)-1)))
+}
 
+apply(mat_rand, MARGIN = 1:2, FUN = round_mat)
 ```
 
 
@@ -206,7 +210,12 @@ max_temps <- read_tsv("state_max_temps.tsv") |>
 Calculate the average temperature for each month across the whole data frame (using the data for all three states together).
 
 ```{r}
+temps <- max_temps[3:14]
+means <- function(x) {
+  return(mean(x))
+}
 
+apply(temps, MARGIN = 2, means)
 ```
 
 
@@ -221,7 +230,14 @@ Create three new data frames by slicing the data by state.
 No need to print any output here.
 
 ```{r}
+CO <- max_temps |> 
+  filter(state == "CO")
 
+OH <- max_temps |> 
+  filter(state == "OH")
+
+VA <- max_temps |> 
+  filter(state == "VA")
 ```
 
 
@@ -255,6 +271,19 @@ Example: The number 312 would return 6 (3 + 1 + 2)
 Run your function with 935068.
 
 ```{r}
+sum_of_digits <- function(number) {
+  helper <- function(x, acc){
+    if (x == 0){
+      return(acc)
+    }
+    else {
+      acc = acc + x%%10
+      helper(x%/%10, acc) 
+    }
+  }
+  helper(number, 0)
+}
 
+sum_of_digits(935068)
 ```
 
