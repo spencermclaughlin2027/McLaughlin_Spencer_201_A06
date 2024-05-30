@@ -10,7 +10,7 @@ execute:
   message: false
   warning: false
 editor_options: 
-  chunk_output_type: console
+  chunk_output_type: inline
 ---
 
 # Instructions
@@ -102,9 +102,9 @@ Extract the value `8162` (LeBron James points) in 2 different ways:
 - using names
 
 ```{r}
-player_info[[2]][[4]]
+print(player_info[[2]][[4]])
 
-player_info$LJ$points
+print(player_info$LJ$points)
 ```
 
 
@@ -140,11 +140,11 @@ Hint: initialize an empty list
 Note: this must still run correctly even if the values were to change or if another player were added to the list or if the player order changed.
 
 ```{r}
-new_list = c()
-names = names(player_info)
+new_list = c() #create empty new list
+names = names(player_info) #gets you each player's initials in a list
 for (i in names) {
-  index = player_info[[i]]
-  new_list[[i]] = (index$points)/(index$games_played) 
+  index = player_info[[i]] #index each player's stats
+  new_list[[i]] = (index$points)/(index$games_played) #add to new list points/games played
 }
 new_list
 ```
@@ -158,7 +158,7 @@ Store the output as a vector and print the results.
 
 ```{r}
 rounded <- function(x) {
-  return(round(x, digits = 2))
+  return(round(x, digits = 2)) 
 }
 
 sapply(new_list, rounded)
@@ -183,10 +183,10 @@ Hint: use `MARGIN = 1:2` to apply the function to each value instead of only a r
 
 ```{r}
 round_mat <- function(val) {
-  return(round(val, -(nchar(val)-1)))
+  return(round(val, -(nchar(val)-1))) #rounds to the correct amount of digits
 }
 
-apply(mat_rand, MARGIN = 1:2, FUN = round_mat)
+apply(mat_rand, MARGIN = 1:2, FUN = round_mat) #applies to everything in the matrix
 ```
 
 
@@ -210,12 +210,12 @@ max_temps <- read_tsv("state_max_temps.tsv") |>
 Calculate the average temperature for each month across the whole data frame (using the data for all three states together).
 
 ```{r}
-temps <- max_temps[3:14]
+temps <- max_temps[3:14] #gets the month columns from data frame
 means <- function(x) {
-  return(mean(x))
+  return(mean(x)) #returns the average
 }
 
-apply(temps, MARGIN = 2, means)
+apply(temps, MARGIN = 2, means) #gets average of all columns
 ```
 
 
@@ -231,13 +231,13 @@ No need to print any output here.
 
 ```{r}
 CO <- max_temps |> 
-  filter(state == "CO")
+  filter(state == "CO") #slicing to include CO
 
 OH <- max_temps |> 
-  filter(state == "OH")
+  filter(state == "OH") #slicing to only include OH
 
 VA <- max_temps |> 
-  filter(state == "VA")
+  filter(state == "VA") #slicing to only include VA
 ```
 
 
@@ -258,7 +258,19 @@ Example (this is NOT the answer just an example of what goes in the {}):
 Note: This code should still run successfully even if the numbers were to change.
 
 ```{r}
+CO_temps <- CO[3:14] #gets the months columns
+medians <- function(x) {
+  return(median(x)) #return median
+}
+med_temps <- apply(CO_temps, MARGIN = 1, medians) #get median of each year
 
+max <- med_temps[which.max(med_temps)] #find max median temp
+min <- med_temps[which.min(med_temps)] #find min median temp
+
+max_year <- CO$year[which.max(med_temps)] #find year of max median temp
+min_year <- CO$year[which.min(med_temps)] #find year of min median temp
+
+paste0("The maximum median annual annual temperature of ", max, " occurred in ", max_year, " and the minimum annual temperature of ", min, " occurred in ", min_year, ".")
 ```
 
 
@@ -272,16 +284,14 @@ Run your function with 935068.
 
 ```{r}
 sum_of_digits <- function(number) {
-  helper <- function(x, acc){
-    if (x == 0){
-      return(acc)
+  if (number == 0){ #if number is 0 return 0
+    return(0)
     }
-    else {
-      acc = acc + x%%10
-      helper(x%/%10, acc) 
+  else {
+    add = number%%10 #last digit
+    new_num = number%/%10 #number with last digit removed
+    return(add + sum_of_digits(new_num)) #add last number with sum of rest of digits
     }
-  }
-  helper(number, 0)
 }
 
 sum_of_digits(935068)
